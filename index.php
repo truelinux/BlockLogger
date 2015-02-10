@@ -46,15 +46,17 @@ class Main extends PluginBase  implements Listener {
                     return true;
                 }
                 if($provider == "CONFIG" && file_exists($this->getDataFolder() . "Players/" . $name . ".yml")) {
-                    $this->conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML);
+                    //$this->conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML);
                     
                     //OTHER WAY
-                     $conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML)->getall();
-		     $conf['Breaks'] = $conf['Breaks'] .  $pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date;           
+                     $conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML, array());
+                     $cc = $conf->getall();
+		     $cc['Breaks'] = $cc['Breaks'] .  $pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date;           
+            	     $conf->setAll($cc);
+            	     $conf->save();
                     
-                    
-                    $this->conf->set("Breaks", [$pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date,]);
-                    $this->conf->save();
+                    //$this->conf->set("Breaks", [$pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date,]);
+                    //$this->conf->save();
                     return true;
                 }
             }
