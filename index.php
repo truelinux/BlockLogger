@@ -47,6 +47,12 @@ class Main extends PluginBase  implements Listener {
                 }
                 if($provider == "CONFIG" && file_exists($this->getDataFolder() . "Players/" . $name . ".yml")) {
                     $this->conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML);
+                    
+                    //OTHER WAY
+                     $conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML)->getall();
+		     $conf['Breaks'] = $conf['Breaks'] .  $pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date;           
+                    
+                    
                     $this->conf->set("Breaks", [$pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date,]);
                     $this->conf->save();
                     return true;
