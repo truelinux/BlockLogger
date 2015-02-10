@@ -1,0 +1,10 @@
+---
+Enabled: true
+#################
+#Set to false to disable
+#################
+Provider: CONFIG
+Users:
+    Crispeh:
+    - true
+...
