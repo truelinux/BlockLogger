@@ -51,6 +51,9 @@ class Main extends PluginBase  implements Listener {
                     //OTHER WAY
                      $conf = new Config($this->getDataFolder() . "Players/" . $name . ".yml", CONFIG::YAML, array());
                      $cc = $conf->getall();
+                     if (empty($cc['Breaks']){
+                     	$cc['Breaks'] == "";
+                     }
 		     $cc['Breaks'] = $cc['Breaks'] .  $pos->getX() . "," . $pos->getY() . "," . $pos->getZ() . ", Time->" . $date;           
             	     $conf->setAll($cc);
             	     $conf->save();
