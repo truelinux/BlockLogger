@@ -31,7 +31,119 @@ class Main extends PluginBase  implements Listener {
  		$this->db->exec("CREATE TABLE IF NOT EXISTS logPlace (player TEXT, block TEXT, data TEXT);");
         }
 	
-	
+	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
+		if($sender instanceof Player) {
+                    $player = $sender->getPlayer()->getName();
+                    $auth = $this->getConfig()->get($player);
+                    if(strtolower($command->getName('bl'))) {
+                        if(empty($args)) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]\n/bl reset <player>");
+                            return true;
+                        }
+                        if($args[0] == "reset") {
+                            if(empty($args[1])) {
+                                $sender->sendMessage("> Usage:\n/bl reset <player>");
+                                return true;
+                            }
+                            $auth = $this->getConfig()->get($args[1]);
+                            if(!$auth) {
+                                $sender->sendMessage("> Player not being logged, case sensitive.");
+                                return true;
+                            }
+                            $this->db->query("DELETE FROM logBreak WHERE player='$args[1]';");
+                            $this->db->query("DELETE FROM logPlace WHERE player='$args[1]';");
+                            return true;
+                        }
+                        if(empty($args[0])) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]");
+                            return true;
+                        }
+                        if(empty($args[1])) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]");
+                            return true;
+                        }
+                        $auth = $this->getConfig()->get($args[0]);
+                        if(!$auth) {
+                            $sender->sendMessage("> Player not being logged, case sensitive.");
+                            return true;
+                        }
+                        if($args[1] == "break") {
+                            $name = $args[0];
+                            $block = $this->getBreakBlock($name);
+                            $data = $this->getBreakData($name);
+                            $msg = "$name -> $block , $data";
+                            foreach($msg as $send) {
+                                $sender->sendMessage($send);
+                            }
+                            return true;
+                        }
+                        if($args[1] == "place") {
+                            $name = $args[0];
+                            $block = $this->getPlaceBlock($name);
+                            $data = $this->getPlaceData($name);
+                            $msg = "$name -> $block , $data";
+                            foreach($msg as $send) {
+                                $sender->sendMessage($send);
+                            }
+                            return true;
+                        }
+                    }
+                }else{
+                    if(strtolower($command->getName('bl'))) {
+                        if(empty($args)) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]\n/bl reset <player>");
+                            return true;
+                        }
+                        if($args[0] == "reset") {
+                            if(empty($args[1])) {
+                                $sender->sendMessage("> Usage:\n/bl reset <player>");
+                                return true;
+                            }
+                            $auth = $this->getConfig()->get($args[1]);
+                            if(!$auth) {
+                                $sender->sendMessage("> Player not being logged, case sensitive.");
+                                return true;
+                            }
+                            $this->db->query("DELETE FROM logBreak WHERE player='$args[1]';");
+                            $this->db->query("DELETE FROM logPlace WHERE player='$args[1]';");
+                            return true;
+                        }
+                        if(empty($args[0])) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]");
+                            return true;
+                        }
+                        if(empty($args[1])) {
+                            $sender->sendMessage("> Usage:\n/bl <player> [break/place]");
+                            return true;
+                        }
+                        $auth = $this->getConfig()->get($args[0]);
+                        if(!$auth) {
+                            $sender->sendMessage("> Player not being logged, case sensitive.");
+                            return true;
+                        }
+                        if($args[1] == "break") {
+                            $name = $args[0];
+                            $block = $this->getBreakBlock($name);
+                            $data = $this->getBreakData($name);
+                            $msg = "$name -> $block , $data";
+                            foreach($msg as $send) {
+                                $sender->sendMessage($send);
+                            }
+                            return true;
+                        }
+                        if($args[1] == "place") {
+                            $name = $args[0];
+                            $block = $this->getPlaceBlock($name);
+                            $data = $this->getPlaceData($name);
+                            $msg = "$name -> $block , $data";
+                            foreach($msg as $send) {
+                                $sender->sendMessage($send);
+                            }
+                            return true;
+                        }
+                    }
+                }
+        }
 	public function onBreak(BlockBreakEvent $ev) {
             $player = $ev->getPlayer();
             $name = $player->getName();
@@ -70,4 +182,24 @@ class Main extends PluginBase  implements Listener {
                 }
             }
         }
+        public function getBreakBlock($player) {
+            $break = $this->db->query("SELECT * FROM logBreak WHERE player='$player';");
+            $breakArray = $break->fetchArray(SQLITE3_ASSOC);
+            return $breakArray["block"];
+	}
+        public function getBreakData($player) {
+            $break = $this->db->query("SELECT * FROM logBreak WHERE player='$player';");
+            $breakArray = $break->fetchArray(SQLITE3_ASSOC);
+            return $breakArray["data"];
+	}
+        public function getPlaceBlock($player) {
+            $place = $this->db->query("SELECT * FROM logPlace WHERE player='$player';");
+            $placeArray = $place->fetchArray(SQLITE3_ASSOC);
+            return $placeArray["block"];
+	}
+        public function getPlaceData($player) {
+            $place = $this->db->query("SELECT * FROM logPlace WHERE player='$player';");
+            $placeArray = $place->fetchArray(SQLITE3_ASSOC);
+            return $placeArray["data"];
+	}
 }
