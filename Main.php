@@ -143,7 +143,7 @@ class Main extends PluginBase  implements Listener {
                         }
                     }
                 }
-        }
+        }//TEST
 	public function onBreak(BlockBreakEvent $ev) {
             $player = $ev->getPlayer();
             $name = $player->getName();
