@@ -30,6 +30,11 @@ class Main extends PluginBase  implements Listener {
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->getLogger()->info( TextFormat::GREEN . "BlockLogger - Enabled!" );
                 $this->db = new \SQLite3($this->getDataFolder() . "Log.db");
+                //Automatically Reset
+                if($this->getConfig()->get("AutoReset")) {
+                    $time = $this->getConfig()->get("ResetTime") * 1200;
+                    $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new AutoTask($this), 120, $time);
+                }
         }
 	
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
@@ -163,6 +168,15 @@ class Main extends PluginBase  implements Listener {
                 }
             }
         }
+        public function getAll() {
+            $table = $this->db->query("SELECT tbl_name FROM sqlite_master WHERE type = 'table';");
+            $tableArray = $table->fetchArray(SQLITE3_ASSOC);
+            $tp = $tableArray["tbl_name"];
+            return $tp;
+	}
+        public function killAll($tp) {
+            $this->db->query("DROP TABLE $tp;");
+	}
         public function getBreakFormat($player) {
             $break = $this->db->query("SELECT * FROM $player WHERE action='BREAK';");
             while($row = $break->fetchArray(SQLITE3_ASSOC)) {
