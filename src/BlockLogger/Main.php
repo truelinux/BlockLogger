@@ -36,6 +36,10 @@ class Main extends PluginBase  implements Listener {
                     $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new AutoTask($this), 120, $time);
                 }
         }
+        
+        public function onDisable() {
+            $this->db->close();
+        }
 	
 	public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
 		if($sender instanceof Player) {
