@@ -1,0 +1,18 @@
+name: BlockLogger
+author: LilCrispy2o9/Angelo Vidrio
+description: Log blocks for certain players!
+version: 1.0.0
+main: BlockLogger\Main
+api: [1.10.0]
+commands:
+  bl:
+    description: Use /bl for all parameters
+    permission: blocklogger.access
+permissions:
+  blocklogger:
+    default: op
+    description: "Allow use of all bl features"
+    children:
+      blocklogger.access:
+        default: op
+        description: "Allow use of all bl commands"

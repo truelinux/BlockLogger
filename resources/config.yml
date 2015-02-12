@@ -1,0 +1,11 @@
+---
+Enabled: true
+#################
+#Set to false to disable
+#################
+AutoReset: false
+#Enables auto resetting players data
+ResetTime: 5
+#This is time in hours that will reset all players data
+...
+
